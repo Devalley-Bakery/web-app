@@ -1,4 +1,4 @@
-import Homepage from "./HomePage/HomePage"
+import Homepage from "./Homepage/Homepage";
 
 export default (
     Homepage

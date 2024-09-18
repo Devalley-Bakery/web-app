@@ -1,21 +1,34 @@
-import { AppBar, Toolbar, Button, Box, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { Box, Button } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { useTheme } from '@mui/material/styles';
 
-const Navbar = () => {
+const Header = () => {
+  const location = useLocation();
+  const theme = useTheme()
+
+  const headerStyle = {
+    backgroundColor: location.pathname === '/' ?theme.palette.background : theme.palette.common.white,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '10px 20px',
+  };
+
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: '#d7c5ed' }}>
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h6" component="div">
-          Bakery in Clouds
-        </Typography>
-        <Box>
-          <Button color="inherit" component={Link} to="/estoque">Estoque</Button>
-          <Button color="inherit" component={Link} to="/pedidos">Pedidos</Button>
-          <Button color="inherit" component={Link} to="/novo-pedido">Novo Pedido</Button>
-        </Box>
-      </Toolbar>
-    </AppBar>
+    <Box sx={headerStyle}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <MenuIcon />
+        <Button component={Link} to="/" sx={{ fontFamily:'Ruluko', fontSize:'25px',marginLeft: 1, color: 'black', textTransform: 'none' }}>
+          MENU
+        </Button>
+      </Box>
+      <Button component={Link} to="/novo-pedido" sx={{ color: 'black', textTransform: 'none', fontSize:'18px', }}>
+        <AddCircleOutlineIcon sx={{ marginRight: 1 }} /> Novo Pedido
+      </Button>
+    </Box>
   );
 };
 
-export default Navbar;
+export default Header;

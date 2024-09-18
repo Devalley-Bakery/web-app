@@ -1,31 +1,28 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
-    palette: {
-      background: {
-        default: '#ccc7f1', 
-        paper: '#ffffff', 
-      },
-      primary: {
-        main: '#E2A5AA',
-      },
-      secondary: {
-        main: '#D4BBC8',
-      },
-      text: {
-        primary: '#4D2B7F',
-      },
+  palette: {
+    background: {
+      default: "#ECDDFF",
+      paper: "#ffffff",
     },
-    typography: {
-      fontFamily: "'Roboto', sans-serif",
-      h1: {
-        fontFamily: "'Caveat', cursive",
-        fontSize: '3rem',
-      },
-      button: {
-        fontSize: '1.2rem',
-      },
+    primary: {
+      main: "#CCACFF59",
     },
-  });
+    secondary: {
+      main: "#FFD8E4",
+    },
+    text: {
+      primary: '#000000',
+      secondary: '#FFFFFF',
+    },
+  },
+  typography: {
+    fontFamily: "Arial, sans-serif",
+    button: {
+      textTransform: "none",
+    },
+  },
+});
 
 export default theme;
