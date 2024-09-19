@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, Container, Grid2, Typography } from "@mui/material";
+import { Box, Button, Container, Divider, Grid2, Typography } from "@mui/material";
 import ProductList from "./ProductList";
 import Footer from "./Footer";
 import { classe } from './styles';
@@ -27,30 +27,53 @@ export default function NewOrder() {
 
   const filteredItems = items.filter(item => item.category === selectedCategory);
 
-
   return (
     <Container sx={classe.container}>
       <Typography component="div" sx={classe.title}>
         Novo Pedido
       </Typography>
+      <Box sx={classe.inputBox}>
+        <input placeholder="Procurar..." style={{ padding: '5px', borderRadius: '5px' }} />
+      </Box>
 
       <Grid2 container spacing={1} sx={{ display: 'flex', flexGrow: 1 }}>
         <Grid2 size={2} sx={classe.buttonGrid}>
-          <Button variant="contained" sx={{ borderRadius: '15px' }} onClick={() => setSelectedCategory('Salgados')}>
+          <Button
+            variant={selectedCategory === 'Salgados' ? 'contained' : 'text'}
+            sx={{
+              borderRadius: '15px',
+              color: 'black',
+            }}
+            onClick={() => setSelectedCategory('Salgados')}
+          >
             Salgados
           </Button>
-          <Button variant="contained" sx={{ borderRadius: '15px' }} onClick={() => setSelectedCategory('Doces')}>
+          <Divider/>
+          <Button
+            variant={selectedCategory === 'Doces' ? 'contained' : 'text'}
+            sx={{
+              borderRadius: '15px',
+              color: 'black',
+            }}
+            onClick={() => setSelectedCategory('Doces')}
+          >
             Doces
           </Button>
-          <Button variant="contained" sx={{ borderRadius: '15px' }} onClick={() => setSelectedCategory('Bebidas')}>
+          <Divider/>
+          <Button
+            variant={selectedCategory === 'Bebidas' ? 'contained' : 'text'}
+            sx={{
+              borderRadius: '15px',
+              color: 'black',
+            }}
+            onClick={() => setSelectedCategory('Bebidas')}
+          >
             Bebidas
           </Button>
         </Grid2>
 
         <Grid2 size={9} sx={classe.mainGrid}>
-          <Box sx={classe.inputBox}>
-            <input placeholder="Procurar..." style={{ padding: '5px', borderRadius: '5px' }} />
-          </Box>
+
           <Container sx={classe.itemListContainer}>
             <ProductList items={filteredItems} handleAdd={handleAdd} handleRemove={handleRemove} />
           </Container>
