@@ -11,11 +11,11 @@ export default function ProductList({ items, handleAdd, handleRemove }) {
         <div key={item.id}>
           <ListItem sx={classe.listItem}>
             <ListItemAvatar>
-              <Avatar variant="rounded" src={item.img} alt={item.name} sx={classe.avatar} />
+              <Avatar variant="rounded" src={item.imagePath} alt={item.name} sx={classe.avatar} />
             </ListItemAvatar>
             <ListItemText
               primary={item.name}
-              secondary={`R$ ${item.price.toFixed(2)}`}
+              secondary={`R$ ${item.price}`}
               sx={classe.listItemText}
             />
             <Box sx={classe.actionButtonsBox}>
