@@ -6,6 +6,7 @@ import { classe } from './styles';
 import api from "../../api";
 import ModalCart from "./ModalCart";
 import DefaultModal from "../../components/DefaultModal";
+import MessageModal from "../../components/MessageModal";
 
 export default function NewOrder() {
   const [selectedCategory, setSelectedCategory] = useState('food');
@@ -13,6 +14,7 @@ export default function NewOrder() {
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [openModal, setOpenModal] = useState(null);
+  const [status, setStatus] = useState({message: '', open: false})
   const isMobile = useMediaQuery('(max-width:600px)');
   const description = 'Confirme para enviar o pedido à produção. Verifique os itens, pois após confirmar, não será possível alterar.'
 
@@ -64,15 +66,33 @@ export default function NewOrder() {
   };
 
   const handleOpenModal = (modalName) => {
-    setOpenModal(modalName); 
+    setOpenModal(modalName);
   };
 
   const handleCloseModal = () => {
-    setOpenModal(null); 
+    setOpenModal(null);
   };
 
   const handleSubmit = () => {
-    console.log("Itens: ", selectedItems)
+    const selectedProducts = selectedItems.map((i) => { return { productId: i.id, quantity: i.quantity } })
+    const newOrder = {
+      employeeId: 2,
+      products: [
+        ...selectedProducts
+      ]
+    }
+    
+    api.post("/orders", newOrder)
+      .then((res) => {
+        if(res.status === 201){
+          setOpenModal(null)
+          setStatus({message: 'Pedido realizado!', open: true})
+        }
+        
+      })
+      .catch((err) => {
+        console.log("erro: ", err);
+      });
   }
 
   return (
@@ -82,8 +102,8 @@ export default function NewOrder() {
         <input placeholder="Procurar..." style={{ padding: '5px', borderRadius: '5px' }} />
       </Box>}
 
-      <Grid2 container spacing={1} sx={{ display: 'flex',flexDirection: isMobile ? 'column' : 'row', flexGrow: 1 }}>
-        <Grid2  size={isMobile ? 12 : 2} sx={classe.buttonGrid}>
+      <Grid2 container spacing={1} sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', flexGrow: 1 }}>
+        <Grid2 size={isMobile ? 12 : 2} sx={classe.buttonGrid}>
           <Button
             variant={selectedCategory === 'food' ? 'contained' : 'text'}
             sx={{
@@ -122,11 +142,12 @@ export default function NewOrder() {
           <Container sx={classe.itemListContainer}>
             <ProductList items={filteredItems} selectedItems={selectedItems} handleAdd={handleAdd} handleRemove={handleRemove} />
           </Container>
-          <Footer items={selectedItems} onOpenCart={handleOpenModal} onOpenConfirm={handleOpenModal}/>
+          <Footer items={selectedItems} onOpenCart={handleOpenModal} onOpenConfirm={handleOpenModal} />
         </Grid2>
       </Grid2>
       <ModalCart title={'Carrinho'} open={openModal === 'cart'} handleClose={handleCloseModal} items={selectedItems} />
-      <DefaultModal title={"Confirmar pedido?"} open={openModal === 'confirm'} handleClose={handleCloseModal}  handleConfirm={handleSubmit} description={description}/>
+      <DefaultModal title={"Confirmar pedido?"} open={openModal === 'confirm'} handleClose={handleCloseModal} handleConfirm={handleSubmit} description={description} />
+      <MessageModal description={status.message} open={status.open} />
     </Container>
   );
 }

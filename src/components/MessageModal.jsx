@@ -3,13 +3,11 @@ import { Box, Backdrop, Fade, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { classe } from "./style";
+import { Link } from "react-router-dom";
 
-export default function DefaultModal({
+export default function MessageModal({
     open,
-    handleClose,
-    handleConfirm,
-    description,
-    title,
+    description
 }) {
     return (
         <div>
@@ -25,14 +23,11 @@ export default function DefaultModal({
                 }}
             >
                 <Fade in={open}>
-                    <Box sx={classe.mainBoxModal}>
-                        <Typography variant="h6">{title}</Typography>
-                        <Typography variant='body2'>{description}</Typography>
-                        <Box spacing={2} sx={{ display: 'flex', flexDirection: 'row', pt: 3, justifyContent: 'space-between' }}>
-
-                            <Button  variant='outlined' sx={{color:'black', borderColor:'black',width: '48%'}} onClick={handleClose}>CANCELAR</Button>
-                            <Button  variant='contained' sx={{width: '48%'}} onClick={handleConfirm}>CONFIMAR</Button>
-                        </Box>
+                    <Box sx={classe.messageModal}>
+                        <Typography sx={{pb:2}}variant='body1'>{description}</Typography>
+                        
+                            <Button variant='contained' sx={{ width: '48%' }}  component={Link} to="/" >FECHAR</Button>
+                        
                     </Box>
                 </Fade>
             </Modal>
