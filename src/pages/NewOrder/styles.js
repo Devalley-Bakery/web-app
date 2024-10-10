@@ -1,5 +1,3 @@
-import { maxHeight } from "@mui/system";
-
 export const classe = {
   container: {
     display: "flex",
