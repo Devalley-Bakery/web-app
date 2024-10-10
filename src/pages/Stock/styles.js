@@ -37,11 +37,12 @@ export const classe = {
     },
     itemListContainer: {
       backgroundColor: (theme) => theme.palette.background.default,
-      mt: 2,
+      mt: 1,
       flexGrow: 1,
       borderRadius: "25px",
       overflowY: "auto",
-      maxHeight: "450px",
+      height: "450px",
+      p:2
     },
     listItem: {
       py: 2,

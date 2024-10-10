@@ -1,29 +1,32 @@
-import { Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@mui/material";
+/* eslint-disable react/prop-types */
+import { Avatar, Box, Grid2, Typography } from "@mui/material";
 import { classe } from './styles';
+import { useEffect } from "react";
 
 export default function ProductList({ items }) {
+
+  const handleClick = (object) => {
+    console.log(`Item ID: ${object}`);
+  };
+
+  useEffect(() => {console.log(items)}, [items])
+
   return (
-    <List>
-      {items.map((item, index) => (
-        <div key={item.id}>
-          <ListItem sx={classe.listItem}>
-            <ListItemAvatar>
+    <Grid2 container spacing={2} >
+      {items.map((item) => {
+        return(
+        <Grid2 item xs={12} sm={6} md={4} lg={2.4} key={item.id} onClick={() => handleClick(item)} >
+          <Box sx={classe.listItem}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', width: '150px'}}>
               <Avatar variant="rounded" src={item.img} alt={item.name} sx={classe.avatar} />
-            </ListItemAvatar>
-            <ListItemText
-              primary={item.name}
-              secondary={
-                <>
-                  {`Preço: R$ ${item.price.toFixed(2)}`} <br />
-                  {`Quantidade: ${item.quantity}`}
-                </>
-              }
-              sx={classe.listItemText}
-            />
-          </ListItem>
-          {index < items.length - 1 && <Divider />}
-        </div>
-      ))}
-    </List>
+              <Typography variant="body1" sx={{ marginTop: '10px' }}>{item.name}</Typography>
+              <Typography variant="body2">{`R$ ${item.price}`}</Typography>
+              <Typography variant='body2'>{`Quantidade: ${item.quantity}`}</Typography>
+            </Box>
+          </Box>
+        </Grid2>
+      )
+      })}
+    </Grid2>
   );
 }
