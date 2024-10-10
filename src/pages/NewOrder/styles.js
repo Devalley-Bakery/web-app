@@ -6,7 +6,7 @@ export const classe = {
     minHeight: "80%",
     minWidth: "100%",
     backgroundColor: (theme) => theme.palette.common.white,
-    mb: "15px",
+    mb: "15px"
   },
   title: {
     display: "flex",
@@ -21,6 +21,12 @@ export const classe = {
     justifyContent: "center",
     flexDirection: "column",
     gap: 2,
+
+    '@media (max-width:600px)': {
+      flexDirection: 'row',
+      mt: 1,
+      mb: 0,
+    },
   },
   mainGrid: {
     pr: 3,
@@ -28,6 +34,9 @@ export const classe = {
     flexDirection: "column",
     flexGrow: 1,
     justifyContent: "space-between",
+    '@media (max-width:600px)': {
+      p: 1,
+    },
   },
   inputBox: {
     pr: 4,
@@ -38,15 +47,30 @@ export const classe = {
     backgroundColor: (theme) => theme.palette.background.default,
     mt: 2,
     flexGrow: 1,
-    borderRadius: "25px",
+    borderRadius: "15px",
     overflowY: "auto",
     maxHeight: "450px",
+    '@media (max-width:600px)': {
+      height: "395px",
+      mt: 0,
+      mb: 3
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "rgba(211, 182, 248, 0.9)",  // Cor do thumb (a parte que se move)
+      borderRadius: "10px",  // Deixa a barra mais arredondada
+    },
+    "&::-webkit-scrollbar-track": {
+      backgroundColor: "rgba(236, 221, 255, 0.9)",  // Cor do track (fundo da barra de rolagem)
+    },
   },
   listItem: {
     py: 2,
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
+    '@media (max-width:600px)': {
+      flexDirection: 'row',
+    },
   },
   listItemText: {
     flexGrow: 1,
@@ -69,6 +93,8 @@ export const classe = {
     px: 1,
     mb: 2,
   },
+
+  //Modal
   mainBoxModal: {
     position: 'absolute',
     top: '50%',
@@ -86,7 +112,7 @@ export const classe = {
     justifyContent: 'space-between',
 
     '@media (max-width: 500px)': {
-      width: '85%',   
+      width: '85%',
     },
   },
   modalTitle: {
@@ -100,7 +126,7 @@ export const classe = {
     borderRadius: '15px',
     height: '70%',
     maxHeight: '70%',
-    p: 2,
+    p: 1,
     my: 1,
     display: 'flex',
     justifyContent: 'space-between',
@@ -108,17 +134,18 @@ export const classe = {
   },
   modalItens: {
     maxHeight: '90%',
-    width:'100%',
+    width: '100%',
     overflowY: 'auto',
-    pb:2
+    pb: 2,
+    mr: 0
   },
   modelDetails: {
-    m:-0.5,
+    m: -0.5,
   },
   modalButton: {
     marginTop: '16px',
     alignSelf: 'center',
-    width: '50%',
+    width: '60%',
     backgroundColor: (theme) => theme.palette.background.secondary,
     color: 'black',
     textTransform: 'none',

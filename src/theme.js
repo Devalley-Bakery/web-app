@@ -1,5 +1,7 @@
 import { createTheme, darken } from "@mui/material/styles";
 
+const primaryMain ='#CCACFF59'
+
 const theme = createTheme({
   palette: {
     background: {
@@ -7,7 +9,7 @@ const theme = createTheme({
       paper: "#ffffff",
     },
     primary: {
-      main: "#CCACFF59",
+      main: primaryMain
     },
     secondary: {
       main: "#FFD8E4",
@@ -27,30 +29,42 @@ const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
-        body: {
-          /* Estilização global da scroll bar */
-          '&::-webkit-scrollbar': {
-            width: '12px',
-            backgroundColor: darken("#ECDDFF", 0.3), // Cor de fundo da área de rolagem
-          },
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: '#888', // Cor do "dedo" da barra de rolagem
-            borderRadius: '6px', // Arredondamento
-            border: '2px solid #f5f5f5', // Espaçamento interno
-          },
-          '&::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: '#666', // Cor ao passar o mouse
-          },
-          '&::-webkit-scrollbar-thumb:active': {
-            backgroundColor: '#555', // Cor ao clicar
-          },
-          /* Personalização para Firefox */
-          scrollbarWidth: 'thin',
-          scrollbarColor: '#888 #f5f5f5',
+        "::-webkit-scrollbar": {
+          width: "12px", 
+        },
+        "::-webkit-scrollbar-thumb": {
+          backgroundColor: "rgba(255, 255, 255, 1)", 
+          borderRadius: "10px",
+        },
+        "::-webkit-scrollbar-thumb:hover": {
+          backgroundColor: "rgba(255, 255, 255, 0.9)", 
+        },
+        "::-webkit-scrollbar-track": {
+          backgroundColor: "rgba(128, 128, 128, 0.2)", 
+          borderRadius: "10px",
         },
       },
     },
   },
-});
 
+  MuiButton: {
+    styleOverrides: {
+      contained: {
+        backgroundColor: primaryMain,
+        color: "#fff",
+        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",
+        "&:hover": {
+          backgroundColor: darken(primaryMain, 0.2),
+        },
+      },
+      outlined: {
+        "&:hover": {
+          backgroundColor: "rgba(204, 172, 255, 0.2)", // Light purple background on hover
+          borderColor: darken(primaryMain, 0.2),
+        },
+      },
+    },
+  },
+
+});
 export default theme;

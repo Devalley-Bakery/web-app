@@ -14,6 +14,7 @@ export default function ProductList({ items, selectedItems, handleAdd, handleRem
          return (
         <div key={item.id}>
           <ListItem sx={classe.listItem}>
+            <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', }}>
             <ListItemAvatar>
               <Avatar variant="rounded" src={item.imagePath} alt={item.name} sx={classe.avatar} />
             </ListItemAvatar>
@@ -22,6 +23,7 @@ export default function ProductList({ items, selectedItems, handleAdd, handleRem
               secondary={`R$ ${item.price}`}
               sx={classe.listItemText}
             />
+            </Box>
             <Box sx={classe.actionButtonsBox}>
               <IconButton onClick={() => handleRemove(item.id)}>
                 <RemoveIcon />
