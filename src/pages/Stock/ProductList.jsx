@@ -20,8 +20,8 @@ export default function ProductList({ items }) {
             <Box sx={{ display: 'flex', flexDirection: 'column', width: '150px'}}>
               <Avatar variant="rounded" src={item.img} alt={item.name} sx={classe.avatar} />
               <Typography variant="body1" sx={{ marginTop: '10px' }}>{item.name}</Typography>
-              <Typography variant="body2">{`R$ ${item.price}`}</Typography>
-              <Typography variant='body2'>{`Quantidade: ${item.quantity}`}</Typography>
+              <Typography variant="body2" sx={{ fontSize: '10px', color: '#515151' }}>{`Preço: R$ ${item.price}`}</Typography>
+              <Typography variant='body2' sx={{ fontSize: '10px', color: '#515151' }} >{`Quantidade: ${item.quantity}`}</Typography>
             </Box>
           </Box>
         </Grid2>

@@ -24,6 +24,8 @@ const Header = () => {
         <Button component={Link} to="/" sx={{ fontFamily:'Ruluko', fontSize:'25px',marginLeft: 1, color: 'black', textTransform: 'none' }}>
         { location.pathname === '/'  ? 'MENU' : 'HOME'}
         </Button>
+      <Button variant={location.pathname === '/estoque' ? "contained" : "text"} component={Link} to="/estoque" sx={{color: 'black'}}>Estoque</Button>
+      <Button variant={location.pathname === '/pedidos' ? "contained" : "text"} component={Link} to="/pedidos" sx={{color: 'black'}}>Pedidos</Button>
       </Box>
       <Button component={Link} to="/novo-pedido" disabled={location.pathname === '/novo-pedido'} sx={{ color: 'black', textTransform: 'none', fontSize:'18px', }}>
         <AddCircleOutlineIcon sx={{ marginRight: 1 }} /> Novo Pedido
