@@ -12,12 +12,12 @@ export default function ProductList({ items }) {
   useEffect(() => {console.log(items)}, [items])
 
   return (
-    <Grid2 container spacing={2} >
+    <Grid2 container  >
       {items.map((item) => {
         return(
-        <Grid2 item xs={12} sm={6} md={4} lg={2.4} key={item.id} onClick={() => handleClick(item)} >
+        <Grid2 item xs={12} sm={6} md={4}  key={item.id} onClick={() => handleClick(item)} >
           <Box sx={classe.listItem}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', width: '150px'}}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', width: '150px', mx: 'auto' }}>
               <Avatar variant="rounded" src={item.img} alt={item.name} sx={classe.avatar} />
               <Typography variant="body1" sx={{ marginTop: '10px' }}>{item.name}</Typography>
               <Typography variant="body2" sx={{ fontSize: '10px', color: '#515151' }}>{`Preço: R$ ${item.price}`}</Typography>
