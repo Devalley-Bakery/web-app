@@ -34,10 +34,5 @@ export default [
         { allowConstantExport: true },
       ],
     },
-    env: {
-      "browser": true,
-      "es2021": true,
-      "node": true  // Adicione esta linha
-    },
   },
 ]
