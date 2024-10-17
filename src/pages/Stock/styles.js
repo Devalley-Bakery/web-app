@@ -1,5 +1,4 @@
 import { darken } from "@mui/material";
-import { borderRadius } from "@mui/system";
 
 // styles.js
 export const classe = {
