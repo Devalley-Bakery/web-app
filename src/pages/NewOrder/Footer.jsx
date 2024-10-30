@@ -3,10 +3,13 @@ import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { classe } from './styles';
 
-export default function Footer({ items, onOpenCart, onOpenConfirm}) {
-  const isMobile = useMediaQuery('(max-width:600px)');
-  const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+export default function Footer({ items = [], onOpenCart, handleSubmit}) {
+  const isMobile = useMediaQuery('(max-width:600px)');7
 
+  const totalPrice = Array.isArray(items) 
+    ? items.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)
+    : "0.00";
+    
   return (
     <Box sx={classe.footerBox}>
       <Button variant="text" sx={{ color: 'black' }} onClick={() => onOpenCart('cart')}>
@@ -17,11 +20,10 @@ export default function Footer({ items, onOpenCart, onOpenConfirm}) {
         Total: R$ {totalPrice}
       </Typography>
 
-      <Button variant="contained" color= 'secondary' onClick={() => onOpenConfirm('confirm')} sx={{
+      <Button variant="contained" color= 'secondary' onClick={handleSubmit} disabled={items.length === 0} sx={{
         '&:hover': {
           backgroundColor: '#FFA1AF',
         },
-        
       }} >
         {`${isMobile ? 'FINALIZAR' : 'REALIZAR PEDIDO'}`}
       </Button>

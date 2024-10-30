@@ -1,11 +1,12 @@
 import Homepage from './Homepage/Homepage'
-import NewOrder from './NewOrder/NewOrder'
+import { NewOrder, ReviewOrder } from './NewOrder'
 import Order from './Order/Order'
-import Stock from './Stock/Stock'
+import Stock from './Stock'
 
-export default {
+export {
     Homepage,
     Order,
     NewOrder,
-    Stock
+    Stock,
+    ReviewOrder
 }

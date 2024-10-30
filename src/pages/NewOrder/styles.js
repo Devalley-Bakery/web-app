@@ -1,4 +1,6 @@
 export const classe = {
+
+  //Página Novo pedido
   container: {
     display: "flex",
     flexDirection: "column",
@@ -156,5 +158,46 @@ export const classe = {
   },
   totalText: {
     pt: 2
-  }
+  },
+  emptyProducts: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "430px",
+    padding: 2,
+    flexGrow: 1,
+    '@media (max-width:600px)': {
+      height: "395px"
+    },
+  },
+
+
+  dataGrid: {
+    height: '60vh',
+    width: '750px',
+    borderRadius: '20px',
+    backgroundColor: (theme) => theme.palette.common.white,
+    '& .MuiDataGrid-root': {
+      overflow: 'hidden',
+      '& .MuiDataGrid-footerContainer': {
+        backgroundColor: (theme) => theme.palette.common.white, 
+      },
+    },
+    '& .MuiDataGrid-cell': {
+      borderBottom: "1px solid #B2A3C9",  
+    },
+    '& .MuiDataGrid-columnHeader': {
+      backgroundColor: (theme) => theme.palette.common.white, 
+      color: 'black',
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    '& .MuiDataGrid-row:nth-of-type(odd)': {
+      backgroundColor: '#E6E6FA', // Light lavender
+    },
+    '& .MuiDataGrid-row:nth-of-type(even)': {
+      backgroundColor: '#fafafa', // Light gray
+    },
+   
+  },
 };

@@ -1,7 +1,7 @@
 import { Container, Typography, Button, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const Orders = () => {
+export default function Order()  {
   const navigate = useNavigate();
 
   return (
@@ -25,4 +25,3 @@ const Orders = () => {
   );
 };
 
-export default Orders;

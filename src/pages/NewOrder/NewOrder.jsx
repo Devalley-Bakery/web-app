@@ -7,6 +7,7 @@ import api from "../../api";
 import ModalCart from "./ModalCart";
 import DefaultModal from "../../components/DefaultModal";
 import MessageModal from "../../components/MessageModal";
+import { useNavigate } from "react-router-dom";
 
 export default function NewOrder() {
   const [selectedCategory, setSelectedCategory] = useState('food');
@@ -16,11 +17,13 @@ export default function NewOrder() {
   const [openModal, setOpenModal] = useState(null);
   const [status, setStatus] = useState({message: '', open: false})
   const isMobile = useMediaQuery('(max-width:600px)');
+  const navigate = useNavigate()
   const description = 'Confirme para enviar o pedido à produção. Verifique os itens, pois após confirmar, não será possível alterar.'
 
   useEffect(() => {
     api.get("/products")
       .then((res) => {
+        console.log(res.data)
         setProducts(res.data);
         filterProducts(res.data, selectedCategory);
       })
@@ -28,6 +31,13 @@ export default function NewOrder() {
         console.log("erro: ", err);
       });
   }, [selectedCategory]);
+
+  useEffect(() => {
+    const savedItems = localStorage.getItem('selectedItems');
+    if (savedItems) {
+      setSelectedItems(JSON.parse(savedItems));  
+    }
+  }, []);
 
   const filterProducts = (products, category) => {
     const newFilteredProducts = products.filter(item => item.type === category);
@@ -74,25 +84,28 @@ export default function NewOrder() {
   };
 
   const handleSubmit = () => {
-    const selectedProducts = selectedItems.map((i) => { return { productId: i.id, quantity: i.quantity } })
-    const newOrder = {
-      employeeId: 2,
-      products: [
-        ...selectedProducts
-      ]
-    }
+    // const selectedProducts = selectedItems.map((i) => { return { productId: i.id, quantity: i.quantity } })
+    // const newOrder = {
+    //   employeeId: 2,
+    //   products: [
+    //     ...selectedProducts
+    //   ]
+    // }
     
-    api.post("/orders", newOrder)
-      .then((res) => {
-        if(res.status === 201){
-          setOpenModal(null)
-          setStatus({message: 'Pedido realizado!', open: true})
-        }
+    localStorage.setItem('selectedItems', JSON.stringify(selectedItems))
+    navigate('confirmar')
+
+    // api.post("/orders", newOrder)
+    //   .then((res) => {
+    //     if(res.status === 201){
+    //       setOpenModal(null)
+    //       setStatus({message: 'Pedido realizado!', open: true})
+    //     }
         
-      })
-      .catch((err) => {
-        console.log("erro: ", err);
-      });
+    //   })
+    //   .catch((err) => {
+    //     console.log("erro: ", err);
+    //   });
   }
 
   return (
@@ -142,12 +155,12 @@ export default function NewOrder() {
           <Container sx={classe.itemListContainer}>
             <ProductList items={filteredItems} selectedItems={selectedItems} handleAdd={handleAdd} handleRemove={handleRemove} />
           </Container>
-          <Footer items={selectedItems} onOpenCart={handleOpenModal} onOpenConfirm={handleOpenModal} />
+          <Footer items={selectedItems} onOpenCart={handleOpenModal} handleSubmit={handleSubmit} />
         </Grid2>
       </Grid2>
       <ModalCart title={'Carrinho'} open={openModal === 'cart'} handleClose={handleCloseModal} items={selectedItems} />
-      <DefaultModal title={"Confirmar pedido?"} open={openModal === 'confirm'} handleClose={handleCloseModal} handleConfirm={handleSubmit} description={description} />
-      <MessageModal description={status.message} open={status.open} />
+      {/* <DefaultModal title={"Confirmar pedido?"} open={openModal === 'confirm'} handleClose={handleCloseModal} handleConfirm={handleSubmit} description={description} /> */}
+      {/* <MessageModal description={status.message} open={status.open} /> */}
     </Container>
   );
 }
