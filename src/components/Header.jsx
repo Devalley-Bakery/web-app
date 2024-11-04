@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import HomeIcon from '@mui/icons-material/Home';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useTheme } from '@mui/material/styles';
 
@@ -19,12 +20,14 @@ const Header = () => {
   return (
     <Box sx={headerStyle}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <MenuIcon />
+        { location.pathname === '/'  ? <MenuIcon /> : <HomeIcon/> }
         <Button component={Link} to="/" sx={{ fontFamily:'Ruluko', fontSize:'25px',marginLeft: 1, color: 'black', textTransform: 'none' }}>
-          MENU
+        { location.pathname === '/'  ? 'MENU' : 'HOME'}
         </Button>
+      <Button variant={location.pathname === '/estoque' ? "contained" : "text"} component={Link} to="/estoque" sx={{color: 'black'}}>Estoque</Button>
+      <Button variant={location.pathname === '/pedidos' ? "contained" : "text"} component={Link} to="/pedidos" sx={{color: 'black'}}>Pedidos</Button>
       </Box>
-      <Button component={Link} to="/novo-pedido" sx={{ color: 'black', textTransform: 'none', fontSize:'18px', }}>
+      <Button component={Link} to="/novo-pedido" disabled={location.pathname === '/novo-pedido'} sx={{ color: 'black', textTransform: 'none', fontSize:'18px', }}>
         <AddCircleOutlineIcon sx={{ marginRight: 1 }} /> Novo Pedido
       </Button>
     </Box>
