@@ -107,7 +107,7 @@ export default function ReviewOrderDialog({ onClose, open, setConfirmDialog }) {
       <Grid2
         container
         spacing={1}
-        sx={{ m: 2, display: "flex", justifyContent: "center" }}
+        sx={{ mx: 2, my:1, display: "flex", justifyContent: "center" }}
       >
         <DataGrid
           sx={{ ...classe.dataGrid }}
@@ -132,7 +132,7 @@ export default function ReviewOrderDialog({ onClose, open, setConfirmDialog }) {
           <Button variant="outlined" sx={classe.cancelButton} onClick={onClose}>
             CANCELAR
           </Button>
-          <Typography sx={classe.totalPrice}>
+          <Typography sx={{mt:1}}>
             Total: R$ {totalPrice.toFixed(2)}
           </Typography>
           <Button
@@ -140,7 +140,7 @@ export default function ReviewOrderDialog({ onClose, open, setConfirmDialog }) {
             color="secondary"
             onClick={() => setConfirmDialog('confirm')}
             sx={{
-              width: "25vw",
+              width: "23vw",
               "&:hover": {
                 backgroundColor: "#FFA1AF",
               },

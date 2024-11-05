@@ -198,7 +198,8 @@ export const classe = {
   actions: {
     display: "flex",
     justifyContent: "space-between",
-    marginTop: "10px",
+    my: "10px",
+    
   },
 
   dataGrid: {
