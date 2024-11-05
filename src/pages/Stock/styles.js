@@ -45,23 +45,40 @@ export const classe = {
     py: 1,
     display: "flex",
     alignItems: "center",
-    width:'162px',
-    borderRadius:'5px',
+    width: '190px',
+    borderRadius: '5px',
     justifyContent: "space-between",
-    transition: "background-color 0.3s ease", 
+    transition: "background-color 0.3s ease",
     ":hover": {
-      backgroundColor: darken("#CCACFF59",0.5) ,
-      cursor: "pointer",  
+      backgroundColor: darken("#CCACFF59", 0.5),
+      cursor: "pointer",
+    },
+    "@media (max-width:800px)": {
+      width: '162px',
     },
   },
   listItemText: {
     flexGrow: 1,
     mx: 2,
   },
+  itemInfo: {
+    display: 'flex', 
+    flexDirection: 'column', 
+    width: '180px', 
+    mx: 'auto',
+    "@media (max-width:900px)": {
+      width: 150,
+      
+    },
+  },
   avatar: {
-    width: 150,
-    height: 150,
+    width: 180,
+    height: 180,
     borderRadius: "10px",
+    "@media (max-width:900px)": {
+      width: 150,
+      height: 150,
+    },
   },
   actionButtonsBox: {
     display: "flex",
@@ -73,4 +90,7 @@ export const classe = {
     px: 1,
     mb: 2,
   },
+  button: {
+    width: '130px'
+  }
 };
