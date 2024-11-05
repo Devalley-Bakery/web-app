@@ -67,7 +67,7 @@ export function CustomFooter({ totalQuantity }) {
   return (
     <Box sx={classe.dialogFooter}>
       <Typography variant="body1">
-        <strong>{totalQuantity}</strong> {totalQuantity > 1 ? "items" : "item"}
+        <strong>{totalQuantity}</strong> {totalQuantity > 1 ? "itens" : "item"}
       </Typography>
     </Box>
   );
@@ -140,7 +140,7 @@ export default function ReviewOrderDialog({ onClose, open, setConfirmDialog }) {
             color="secondary"
             onClick={() => setConfirmDialog('confirm')}
             sx={{
-              width: "23vw",
+              width: "35%",
               "&:hover": {
                 backgroundColor: "#FFA1AF",
               },

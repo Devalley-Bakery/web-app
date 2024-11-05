@@ -19,6 +19,7 @@ export default function ProductList({
   selectedItems,
   handleAdd,
   handleRemove,
+  errorMessages,
 }) {
   return (
     <List>
@@ -30,6 +31,7 @@ export default function ProductList({
           return (
             <div key={item.id}>
               <ListItem sx={classe.listItem}>
+                <Box sx={{display: 'flex', flexDirection: 'column'}}>
                 <Box
                   sx={{
                     display: "flex",
@@ -50,7 +52,15 @@ export default function ProductList({
                     secondary={`R$ ${item.price}`}
                     sx={classe.listItemText}
                   />
+
                 </Box>
+                  {/* Exibe a mensagem de erro em vermelho, se houver */}
+                  {errorMessages[item.id] && (
+                    <Typography sx={{ color: "red",pt:1, fontSize: "0.9em" }}>
+                      {errorMessages[item.id]}
+                    </Typography>
+                  )}
+                  </Box>
                 <Box sx={classe.actionButtonsBox}>
                   <IconButton onClick={() => handleRemove(item.id)}>
                     <RemoveIcon />

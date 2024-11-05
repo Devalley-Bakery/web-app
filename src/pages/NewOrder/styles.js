@@ -192,7 +192,8 @@ export const classe = {
   },
   cancelButton: {
     color: "black",
-    width: "25vw",
+    borderColor: 'black',
+    width: "35%",
     height: "35px",
   },
   actions: {

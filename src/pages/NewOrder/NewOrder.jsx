@@ -23,6 +23,7 @@ export default function NewOrder() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [openModal, setOpenModal] = useState(null);
   const [status, setStatus] = useState({ message: "", open: false });
+  const [errorMessages, setErrorMessages] = useState({});
   const isMobile = useMediaQuery("(max-width:600px)");
   const description =
     "Confirme para enviar o pedido à produção. Após confirmar, não será possível alterar.";
@@ -55,10 +56,29 @@ export default function NewOrder() {
   };
 
   const handleAdd = (id) => {
+    const product = products.find((item) => item.id === id);
+    const selectedItem = selectedItems.find((item) => item.id === id);
+
+    if (selectedItem && selectedItem.quantity >= product.stockQuantity) {
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        [id]: "Quantidade máxima em estoque atingida!",
+      }));
+      return; 
+    }
+    setErrorMessages((prevErrors) => ({
+      ...prevErrors,
+      [id]: null,
+    }));
+
     updateQuantity(id, 1);
   };
 
   const handleRemove = (id) => {
+    setErrorMessages((prevErrors) => ({
+      ...prevErrors,
+      [id]: null,
+    }));
     updateQuantity(id, -1);
   };
 
@@ -115,7 +135,7 @@ export default function NewOrder() {
       .catch((err) => {
         console.log("erro: ", err);
       });
-      localStorage.removeItem('selectedItems');
+    localStorage.removeItem("selectedItems");
   };
 
   const handleConfirm = () => {
@@ -180,6 +200,7 @@ export default function NewOrder() {
               selectedItems={selectedItems}
               handleAdd={handleAdd}
               handleRemove={handleRemove}
+              errorMessages={errorMessages}
             />
           </Container>
           <Footer
