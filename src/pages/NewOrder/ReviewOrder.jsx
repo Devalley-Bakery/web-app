@@ -1,5 +1,13 @@
-/* eslint-disable react/prop-types */
-import { Box, Container, Grid2, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Dialog,
+  DialogTitle,
+  Grid2,
+  Typography,
+} from "@mui/material";
+import PropTypes from "prop-types";
 import { classe } from "./styles";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
@@ -8,7 +16,7 @@ const columns = [
   {
     field: "id",
     headerName: "ID",
-    width: 90,
+    width: 70,
     align: "center",
     headerAlign: "center",
     headerClassName: "header-cell",
@@ -16,8 +24,7 @@ const columns = [
   {
     field: "name",
     headerName: "Item",
-    width: 290,
-
+    width: 200,
     editable: false,
     headerClassName: "header-cell",
   },
@@ -51,84 +58,104 @@ const columns = [
     headerClassName: "header-cell",
     headerAlign: "center",
     valueGetter: (value, row) => {
-     
-     return  (row.quantity * row.price).toFixed(2);
+      return (row.quantity * row.price).toFixed(2);
     },
   },
 ];
 
-export function CustomFooter({ totalPrice, totalQuantity }) {
+export function CustomFooter({ totalQuantity }) {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-        padding: "10px",
-        px:" 20px",
-        backgroundColor: "#CDB8E9", // Fundo suave
-                // Bordas arredondadas
-        marginTop: "20px",          // Espaço extra abaixo do DataGrid
-      }}
-    >
-      <Typography variant="body1">Total de Itens: <strong>{totalQuantity}</strong></Typography>
-      <Typography  sx={{ color: "#333", fontWeight: "bold" }}>
-        Valor Total: R$ {totalPrice.toFixed(2)}
+    <Box sx={classe.dialogFooter}>
+      <Typography variant="body1">
+        <strong>{totalQuantity}</strong> {totalQuantity > 1 ? "items" : "item"}
       </Typography>
     </Box>
   );
 }
 
+CustomFooter.propTypes = {
+  totalQuantity: PropTypes.number.isRequired,
+};
 
-export default function ReviewOrder() {
-  //const isMobile = useMediaQuery("(max-width:600px)");
+export default function ReviewOrderDialog({ onClose, open, setConfirmDialog }) {
   const [products, setProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalQuantity, setTotalQuantity] = useState(0);
 
-
   useEffect(() => {
-    const savedItems = localStorage.getItem("selectedItems");
-    if (savedItems) {
-      const parsedItems = JSON.parse(savedItems);
-      setProducts(parsedItems);
+    if (open) {
+      const savedItems = JSON.parse(localStorage.getItem("selectedItems") || "[]");
+      setProducts(savedItems);
 
-      const totalPriceCalc = parsedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      const totalQuantityCalc = parsedItems.reduce((sum, item) => sum + item.quantity, 0);
+      const totalPriceCalc = savedItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
+      const totalQuantityCalc = savedItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      );
 
       setTotalPrice(totalPriceCalc);
       setTotalQuantity(totalQuantityCalc);
     }
-  }, []);
+  }, [open]); 
 
   return (
-    <Container>
-      <Typography component="div" sx={{ ...classe.title, pt: 2 }}>
-        Revisão do Pedido
-      </Typography>
-
+    <Dialog open={open} sx={classe.receipt}>
+      <DialogTitle sx={{ margin: "auto" }}> Revisão do Pedido</DialogTitle>
       <Grid2
         container
         spacing={1}
         sx={{ m: 2, display: "flex", justifyContent: "center" }}
       >
-          <DataGrid
-            sx={{ ...classe.dataGrid }} 
-            rows={products}
-            columns={columns}
-            pageSize={products.length}
-            rowsPerPageOptions={[]}
-            disableSelectionOnClick
-            disableColumnResize
-            disableColumnSorting
-            slots={{
-              footer: () => <CustomFooter totalPrice={totalPrice} totalQuantity={totalQuantity} />,
+        <DataGrid
+          sx={{ ...classe.dataGrid }}
+          rows={products}
+          columns={columns}
+          pageSize={products.length}
+          rowsPerPageOptions={[]}
+          disableSelectionOnClick
+          disableColumnResize
+          disableColumnSorting
+          slots={{
+            footer: () => (
+              <CustomFooter
+                totalPrice={totalPrice}
+                totalQuantity={totalQuantity}
+              />
+            ),
+          }}
+        />
+
+        <Container sx={classe.actions}>
+          <Button variant="outlined" sx={classe.cancelButton} onClick={onClose}>
+            CANCELAR
+          </Button>
+          <Typography sx={classe.totalPrice}>
+            Total: R$ {totalPrice.toFixed(2)}
+          </Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => setConfirmDialog('confirm')}
+            sx={{
+              width: "25vw",
+              "&:hover": {
+                backgroundColor: "#FFA1AF",
+              },
             }}
-          />
-        
+          >
+            PROSSEGUIR
+          </Button>
+        </Container>
       </Grid2>
-      {/* <DefaultModal title={"Confirmar pedido?"} open={openModal === 'confirm'} handleClose={handleCloseModal} handleConfirm={handleSubmit} description={description} /> */}
-      {/* <MessageModal description={status.message} open={status.open} /> */}
-    </Container>
+    </Dialog>
   );
 }
+
+ReviewOrderDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  setConfirmDialog: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+};

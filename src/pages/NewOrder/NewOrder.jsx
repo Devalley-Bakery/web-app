@@ -1,29 +1,37 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Container, Divider, Grid2, Typography, useMediaQuery } from "@mui/material";
+import {
+  Button,
+  Container,
+  Divider,
+  Grid2,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import ProductList from "./ProductList";
 import Footer from "./Footer";
-import { classe } from './styles';
+import { classe } from "./styles";
 import api from "../../api";
 import ModalCart from "./ModalCart";
 import DefaultModal from "../../components/DefaultModal";
 import MessageModal from "../../components/MessageModal";
-import { useNavigate } from "react-router-dom";
+import ReviewOrderDialog from "./ReviewOrder";
 
 export default function NewOrder() {
-  const [selectedCategory, setSelectedCategory] = useState('food');
+  const [selectedCategory, setSelectedCategory] = useState("food");
   const [products, setProducts] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [openModal, setOpenModal] = useState(null);
-  const [status, setStatus] = useState({message: '', open: false})
-  const isMobile = useMediaQuery('(max-width:600px)');
-  const navigate = useNavigate()
-  const description = 'Confirme para enviar o pedido à produção. Verifique os itens, pois após confirmar, não será possível alterar.'
+  const [status, setStatus] = useState({ message: "", open: false });
+  const isMobile = useMediaQuery("(max-width:600px)");
+  const description =
+    "Confirme para enviar o pedido à produção. Após confirmar, não será possível alterar.";
 
   useEffect(() => {
-    api.get("/products")
+    api
+      .get("/products")
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         setProducts(res.data);
         filterProducts(res.data, selectedCategory);
       })
@@ -33,14 +41,16 @@ export default function NewOrder() {
   }, [selectedCategory]);
 
   useEffect(() => {
-    const savedItems = localStorage.getItem('selectedItems');
+    const savedItems = localStorage.getItem("selectedItems");
     if (savedItems) {
-      setSelectedItems(JSON.parse(savedItems));  
+      setSelectedItems(JSON.parse(savedItems));
     }
   }, []);
 
   const filterProducts = (products, category) => {
-    const newFilteredProducts = products.filter(item => item.type === category);
+    const newFilteredProducts = products.filter(
+      (item) => item.type === category
+    );
     setFilteredItems(newFilteredProducts);
   };
 
@@ -53,18 +63,20 @@ export default function NewOrder() {
   };
 
   const updateQuantity = (id, delta) => {
-    const updatedProducts = products.map(item =>
+    const updatedProducts = products.map((item) =>
       item.id === id ? { ...item, quantity: item.quantity + delta } : item
     );
     setProducts(updatedProducts);
 
-    const product = updatedProducts.find(item => item.id === id);
-    const itemExists = selectedItems.find(item => item.id === id);
+    const product = updatedProducts.find((item) => item.id === id);
+    const itemExists = selectedItems.find((item) => item.id === id);
 
     if (itemExists) {
-      const updatedItems = selectedItems.map(item =>
-        item.id === id ? { ...item, quantity: item.quantity + delta } : item
-      ).filter(item => item.quantity > 0);
+      const updatedItems = selectedItems
+        .map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity + delta } : item
+        )
+        .filter((item) => item.quantity > 0);
       setSelectedItems(updatedItems);
     } else if (delta > 0) {
       setSelectedItems([...selectedItems, { ...product, quantity: 1 }]);
@@ -84,68 +96,78 @@ export default function NewOrder() {
   };
 
   const handleSubmit = () => {
-    // const selectedProducts = selectedItems.map((i) => { return { productId: i.id, quantity: i.quantity } })
-    // const newOrder = {
-    //   employeeId: 2,
-    //   products: [
-    //     ...selectedProducts
-    //   ]
-    // }
-    
-    localStorage.setItem('selectedItems', JSON.stringify(selectedItems))
-    navigate('confirmar')
+    const selectedProducts = selectedItems.map((i) => {
+      return { productId: i.id, quantity: i.quantity };
+    });
+    const newOrder = {
+      employeeId: 2,
+      products: [...selectedProducts],
+    };
 
-    // api.post("/orders", newOrder)
-    //   .then((res) => {
-    //     if(res.status === 201){
-    //       setOpenModal(null)
-    //       setStatus({message: 'Pedido realizado!', open: true})
-    //     }
-        
-    //   })
-    //   .catch((err) => {
-    //     console.log("erro: ", err);
-    //   });
-  }
+    api
+      .post("/orders", newOrder)
+      .then((res) => {
+        if (res.status === 201) {
+          setOpenModal(null);
+          setStatus({ message: "Pedido realizado!", open: true });
+        }
+      })
+      .catch((err) => {
+        console.log("erro: ", err);
+      });
+      localStorage.removeItem('selectedItems');
+  };
+
+  const handleConfirm = () => {
+    localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+    setOpenModal("receipt");
+  };
 
   return (
     <Container sx={classe.container}>
-      <Typography component="div" sx={classe.title}>Novo Pedido</Typography>
-      {!isMobile && <Box sx={classe.inputBox}>
-        <input placeholder="Procurar..." style={{ padding: '5px', borderRadius: '5px' }} />
-      </Box>}
+      <Typography component="div" sx={classe.title}>
+        Novo Pedido
+      </Typography>
 
-      <Grid2 container spacing={1} sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', flexGrow: 1 }}>
+      <Grid2
+        container
+        spacing={1}
+        sx={{
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          flexGrow: 1,
+        }}
+      >
         <Grid2 size={isMobile ? 12 : 2} sx={classe.buttonGrid}>
           <Button
-            variant={selectedCategory === 'food' ? 'contained' : 'text'}
+            variant={selectedCategory === "food" ? "contained" : "text"}
             sx={{
-              borderRadius: '15px',
-              color: 'black',
+              borderRadius: "15px",
+              color: "black",
             }}
-            onClick={() => handleFilterChange('food')}
+            onClick={() => handleFilterChange("food")}
           >
             Salgados
           </Button>
           <Divider />
           <Button
-            variant={selectedCategory === 'dessert' ? 'contained' : 'text'}
+            variant={selectedCategory === "dessert" ? "contained" : "text"}
             sx={{
-              borderRadius: '15px',
-              color: 'black',
+              borderRadius: "15px",
+              color: "black",
             }}
-            onClick={() => handleFilterChange('dessert')}
+            onClick={() => handleFilterChange("dessert")}
           >
             Doces
           </Button>
           <Divider />
           <Button
-            variant={selectedCategory === 'drink' ? 'contained' : 'text'}
+            variant={selectedCategory === "drink" ? "contained" : "text"}
             sx={{
-              borderRadius: '15px',
-              color: 'black',
+              borderRadius: "15px",
+              color: "black",
             }}
-            onClick={() => handleFilterChange('drink')}
+            onClick={() => handleFilterChange("drink")}
           >
             Bebidas
           </Button>
@@ -153,14 +175,40 @@ export default function NewOrder() {
 
         <Grid2 size={isMobile ? 12 : 9} sx={classe.mainGrid}>
           <Container sx={classe.itemListContainer}>
-            <ProductList items={filteredItems} selectedItems={selectedItems} handleAdd={handleAdd} handleRemove={handleRemove} />
+            <ProductList
+              items={filteredItems}
+              selectedItems={selectedItems}
+              handleAdd={handleAdd}
+              handleRemove={handleRemove}
+            />
           </Container>
-          <Footer items={selectedItems} onOpenCart={handleOpenModal} handleSubmit={handleSubmit} />
+          <Footer
+            items={selectedItems}
+            onOpenModal={handleOpenModal}
+            onConfirm={handleConfirm}
+          />
         </Grid2>
       </Grid2>
-      <ModalCart title={'Carrinho'} open={openModal === 'cart'} handleClose={handleCloseModal} items={selectedItems} />
-      {/* <DefaultModal title={"Confirmar pedido?"} open={openModal === 'confirm'} handleClose={handleCloseModal} handleConfirm={handleSubmit} description={description} /> */}
-      {/* <MessageModal description={status.message} open={status.open} /> */}
+      <ModalCart
+        title={"Carrinho"}
+        open={openModal === "cart"}
+        handleClose={handleCloseModal}
+        items={selectedItems}
+      />
+
+      <ReviewOrderDialog
+        onClose={handleCloseModal}
+        open={openModal === "receipt"}
+        setConfirmDialog={setOpenModal}
+      />
+      <DefaultModal
+        title={"Confirmar pedido?"}
+        open={openModal === "confirm"}
+        handleClose={handleCloseModal}
+        handleConfirm={handleSubmit}
+        description={description}
+      />
+      <MessageModal description={status.message} open={status.open} />
     </Container>
   );
 }

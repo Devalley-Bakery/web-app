@@ -32,11 +32,6 @@ export const classe = {
     flexGrow: 1,
     justifyContent: "space-between",
   },
-  inputBox: {
-    pr: 4,
-    display: "flex",
-    justifyContent: "flex-end",
-  },
   itemListContainer: {
     backgroundColor: (theme) => theme.palette.background.default,
     mt: 1,
