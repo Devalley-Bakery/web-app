@@ -1,22 +1,25 @@
 import { createTheme, darken } from "@mui/material/styles";
 
-const primaryMain ='#CCACFF59'
+const primaryMain = '#CCACFF59';
+const secondaryMain = '#FFD8E4';
+const commonWhite = '#FFFFFF';
+const commonBlack = '#000000';
 
 const theme = createTheme({
   palette: {
     background: {
       default: "#ECDDFF", //lilás
-      paper: "#ffffff",
+      paper: commonWhite,
     },
     primary: {
       main: primaryMain
     },
     secondary: {
-      main: "#FFD8E4",
+      main: secondaryMain,
     },
     text: {
-      primary: '#000000',
-      secondary: '#FFFFFF',
+      primary: commonBlack
+      
     },
   },
   typography: {
@@ -45,6 +48,15 @@ const theme = createTheme({
         },
       },
     },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          "&.Mui-focused": {
+            color: 'black', // Cor do label ao focar
+          },
+        },
+      },
+    },
   },
 
   MuiButton: {
@@ -65,6 +77,8 @@ const theme = createTheme({
       },
     },
   },
+
+
 
 });
 export default theme;
