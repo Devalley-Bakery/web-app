@@ -45,7 +45,7 @@ export const classe = {
     flexGrow: 1,
     borderRadius: "15px",
     overflowY: "auto",
-    maxHeight: "450px",
+    maxHeight: "480px",
     "@media (max-width:600px)": {
       height: "395px",
       mt: 0,
@@ -53,7 +53,7 @@ export const classe = {
     },
     "&::-webkit-scrollbar-thumb": {
       backgroundColor: "rgba(211, 182, 248, 0.9)", // Cor do thumb (a parte que se move)
-      borderRadius: "10px", // Deixa a barra mais arredondada
+      borderRadius: "10px", 
     },
     "&::-webkit-scrollbar-track": {
       backgroundColor: "rgba(236, 221, 255, 0.9)", // Cor do track (fundo da barra de rolagem)

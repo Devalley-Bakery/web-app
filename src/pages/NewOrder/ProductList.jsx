@@ -28,6 +28,7 @@ export default function ProductList({
           const selectedItem = selectedItems.find((i) => i.id === item.id);
           const quantity = selectedItem ? selectedItem.quantity : 0;
 
+
           return (
             <div key={item.id}>
               <ListItem sx={classe.listItem}>
@@ -54,7 +55,6 @@ export default function ProductList({
                   />
 
                 </Box>
-                  {/* Exibe a mensagem de erro em vermelho, se houver */}
                   {errorMessages[item.id] && (
                     <Typography sx={{ color: "red",pt:1, fontSize: "0.9em" }}>
                       {errorMessages[item.id]}
@@ -62,11 +62,11 @@ export default function ProductList({
                   )}
                   </Box>
                 <Box sx={classe.actionButtonsBox}>
-                  <IconButton onClick={() => handleRemove(item.id)}>
+                  <IconButton onClick={() => handleRemove(item.id)} disabled={item.stockQuantity <= 0}>
                     <RemoveIcon />
                   </IconButton>
                   <Typography>{quantity}</Typography>
-                  <IconButton onClick={() => handleAdd(item.id)}>
+                  <IconButton onClick={() => handleAdd(item.id)} disabled={item.stockQuantity=== 0}>
                     <AddIcon />
                   </IconButton>
                 </Box>
