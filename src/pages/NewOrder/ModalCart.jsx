@@ -5,7 +5,7 @@ import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import { classe } from './styles';
 
-export default function ModalCart({ open, handleClose, items, title }) {
+export default function ModalCart({ open, handleClose, items, title, handleConfirm }) {
   const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
 
   return (
@@ -50,6 +50,8 @@ export default function ModalCart({ open, handleClose, items, title }) {
               variant='contained'
               color="secondary"
               sx={classe.modalButton}
+              disabled={totalPrice <= 0}
+              onClick={handleConfirm}
             >
               Registrar Pedido
             </Button>

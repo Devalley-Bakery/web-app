@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Container,
@@ -17,29 +17,31 @@ import MessageModal from "../../components/MessageModal";
 import ReviewOrderDialog from "./ReviewOrder";
 
 export default function NewOrder() {
-  const [selectedCategory, setSelectedCategory] = useState("food");
   const [products, setProducts] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("food");
   const [selectedItems, setSelectedItems] = useState([]);
   const [openModal, setOpenModal] = useState(null);
   const [status, setStatus] = useState({ message: "", open: false });
   const [errorMessages, setErrorMessages] = useState({});
   const isMobile = useMediaQuery("(max-width:600px)");
-  const description =
-    "Confirme para enviar o pedido à produção. Após confirmar, não será possível alterar.";
+
+  const filteredItems = useMemo(
+    () => products.filter((product) => product.type === selectedCategory),
+    [products, selectedCategory]
+  );
 
   useEffect(() => {
-    api
-      .get("/products")
-      .then((res) => {
-        console.log(res.data);
-        setProducts(res.data);
-        filterProducts(res.data, selectedCategory);
-      })
-      .catch((err) => {
-        console.log("erro: ", err);
-      });
-  }, [selectedCategory]);
+    const fetchProducts = async () => {
+      try {
+        const response = await api.get("/products");
+        setProducts(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     const savedItems = localStorage.getItem("selectedItems");
@@ -47,13 +49,6 @@ export default function NewOrder() {
       setSelectedItems(JSON.parse(savedItems));
     }
   }, []);
-
-  const filterProducts = (products, category) => {
-    const newFilteredProducts = products.filter(
-      (item) => item.type === category
-    );
-    setFilteredItems(newFilteredProducts);
-  };
 
   const handleAdd = (id) => {
     const product = products.find((item) => item.id === id);
@@ -64,7 +59,7 @@ export default function NewOrder() {
         ...prevErrors,
         [id]: "Quantidade máxima em estoque atingida!",
       }));
-      return; 
+      return;
     }
     setErrorMessages((prevErrors) => ({
       ...prevErrors,
@@ -133,7 +128,8 @@ export default function NewOrder() {
         }
       })
       .catch((err) => {
-        console.log("erro: ", err);
+        setOpenModal(null);
+        setStatus({ message: err, open: true });
       });
     localStorage.removeItem("selectedItems");
   };
@@ -159,38 +155,23 @@ export default function NewOrder() {
         }}
       >
         <Grid2 size={isMobile ? 12 : 2} sx={classe.buttonGrid}>
-          <Button
-            variant={selectedCategory === "food" ? "contained" : "text"}
-            sx={{
-              borderRadius: "15px",
-              color: "black",
-            }}
-            onClick={() => handleFilterChange("food")}
-          >
-            Salgados
-          </Button>
-          <Divider />
-          <Button
-            variant={selectedCategory === "dessert" ? "contained" : "text"}
-            sx={{
-              borderRadius: "15px",
-              color: "black",
-            }}
-            onClick={() => handleFilterChange("dessert")}
-          >
-            Doces
-          </Button>
-          <Divider />
-          <Button
-            variant={selectedCategory === "drink" ? "contained" : "text"}
-            sx={{
-              borderRadius: "15px",
-              color: "black",
-            }}
-            onClick={() => handleFilterChange("drink")}
-          >
-            Bebidas
-          </Button>
+          {["food", "dessert", "drink"].map((category) => (
+            <Fragment key={category}>
+              <Button
+                key={category}
+                variant={selectedCategory === category ? "contained" : "text"}
+                sx={{ borderRadius: "15px", color: "black" }}
+                onClick={() => handleFilterChange(category)}
+              >
+                {category === "food"
+                  ? "Salgados"
+                  : category === "dessert"
+                  ? "Doces"
+                  : "Bebidas"}
+              </Button>
+              {category !== "drink" && <Divider />}
+            </Fragment>
+          ))}
         </Grid2>
 
         <Grid2 size={isMobile ? 12 : 9} sx={classe.mainGrid}>
@@ -214,6 +195,7 @@ export default function NewOrder() {
         title={"Carrinho"}
         open={openModal === "cart"}
         handleClose={handleCloseModal}
+        handleConfirm={handleConfirm}
         items={selectedItems}
       />
 
@@ -222,12 +204,15 @@ export default function NewOrder() {
         open={openModal === "receipt"}
         setConfirmDialog={setOpenModal}
       />
+
       <DefaultModal
         title={"Confirmar pedido?"}
         open={openModal === "confirm"}
         handleClose={handleCloseModal}
         handleConfirm={handleSubmit}
-        description={description}
+        description={
+          "Confirme para enviar o pedido à produção. Após confirmar, não será possível alterar."
+        }
       />
       <MessageModal description={status.message} open={status.open} />
     </Container>

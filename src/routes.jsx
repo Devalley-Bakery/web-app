@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Layout from "./Layout";
-import { NewOrder, Homepage, ReviewOrder, Stock, Order } from "./pages";
+import { NewOrder, Homepage, Stock, Order } from "./pages";
 
 const AppRoutes = () => {
   return (
@@ -10,7 +10,6 @@ const AppRoutes = () => {
       <Route path="estoque" element={<Stock />} />
       <Route path="pedidos" element={<Order />} />
       <Route path="novo-pedido" element={<NewOrder />} />
-      <Route path="novo-pedido/confirmar" element={<ReviewOrder />} />
     </Route>
   </Routes>
   );
