@@ -39,6 +39,7 @@ export const classe = {
     borderRadius: "25px",
     overflowY: "auto",
     height: "450px",
+    width:'100vw',
     p: 2
   },
   listItem: {

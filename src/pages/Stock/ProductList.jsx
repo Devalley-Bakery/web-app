@@ -10,12 +10,12 @@ export default function ProductList({ items, onItemClick }) {
         return(
         <Grid2 item xs={12} sm={6} md={4}  key={item.id} onClick={() => onItemClick(item)} >
           <Box sx={classe.listItem}>
-          <Box sx={classe.itemInfo}>
-              <Avatar variant="rounded" src={item.img} alt={item.name} sx={classe.avatar} />
+            <Box sx={classe.itemInfo}>
+              <Avatar variant="rounded" src={item.imagePath} alt={item.name} sx={classe.avatar} />
               <Typography variant="body1" sx={{ my: '10px' }}>{item.name}</Typography>
               <Divider/>
               <Typography variant="body2" sx={{ marginTop: 1,fontSize: '12px', color: '#515151' }}>{`Preço: R$ ${item.price}`}</Typography>
-              <Typography variant='body2' sx={{ fontSize: '12px', color: '#515151' }} >{`Quantidade: ${item.quantity}`}</Typography>
+              <Typography variant='body2' sx={{ fontSize: '12px', color: '#515151' }} >{`Quantidade: ${item.stockQuantity}`}</Typography>
             </Box>
           </Box>
         </Grid2>
