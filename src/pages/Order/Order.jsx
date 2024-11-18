@@ -1,100 +1,168 @@
 import { classe } from "./style";
-import { Container, ToggleButton, ToggleButtonGroup, Box, Typography, Button, Divider } from "@mui/material";
-import { useState } from "react";
+import { Container, Divider, Box, CircularProgress } from "@mui/material";
+import { Fragment, useEffect, useState } from "react";
+import api from "../../api";
+import OrderItem from "./OrderItem";
+import OrderModal from "./OrderModal";
+import StatusToggle from "./StatusToggle";
+import OrderCart from "./OrderCart";
+import { Snackbar, Alert } from "@mui/material";
 
-const pedidos = [
-  { id: 4, imagem: "/path/to/image1.jpg", status: "a preparar" },
-  { id: 5, imagem: "/path/to/image2.jpg", status: "a preparar" },
-  { id: 6, imagem: "/path/to/image3.jpg", status: "a preparar" },
-  { id: 7, imagem: "/path/to/image4.jpg", status: "a preparar" },
-];
+const STATUS = {
+  IN_PROGRESS: "in_progress",
+  COMPLETED: "completed",
+  CANCELED: "canceled",
+};
 
 export default function Order() {
-  const [pedidoList, setPedidoList] = useState(pedidos);
-  const [statusFiltro, setStatusFiltro] = useState("a preparar");
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [filter, setFilter] = useState(STATUS.IN_PROGRESS);
+  const [openModal, setOpenModal] = useState(null);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState();
 
-  const handleFiltroChange = (event, novoStatus) => {
-    if (novoStatus !== null) {
-      setStatusFiltro(novoStatus);
+  const fetchOrders = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await api.get(`/orders`);
+      setOrders(response.data.data);
+    } catch (err) {
+      console.log(err);
+      setError("Erro ao carregar os pedidos.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const finalizarPedido = (id) => {
-    setPedidoList((prevPedidos) =>
-      prevPedidos.map((pedido) =>
-        pedido.id === id ? { ...pedido, status: "finalizado" } : pedido
-      )
-    );
+  useEffect(() => {
+    const order = orders.find((o) => o.id === selectedOrderId);
+    setSelectedOrder(order);
+  }, [orders, selectedOrderId]);
+
+  useEffect(() => {
+    fetchOrders(filter);
+  }, [filter]);
+
+  const filteredOrders = orders
+    .filter((order) => order.status === filter)
+    .sort((a, b) => (filter === STATUS.COMPLETED ? b.id - a.id : a.id - b.id));
+
+  const highlightedOrder =
+    filter === STATUS.IN_PROGRESS
+      ? filteredOrders.find((order) => order.status === STATUS.IN_PROGRESS)
+      : null;
+
+  const remainingOrders = highlightedOrder
+    ? filteredOrders.filter((order) => order.id !== highlightedOrder.id)
+    : filteredOrders;
+
+  const updateOrderStatus = async (id, status, updateStateCallback) => {
+    try {
+      await api.put(`/orders/${id}`, { status });
+      setOrders((prevOrders) => updateStateCallback(prevOrders, id));
+    } catch (err) {
+      console.error(err);
+      setError(
+        status === STATUS.COMPLETED
+          ? "Erro ao finalizar o pedido."
+          : "Erro ao cancelar o pedido."
+      );
+    } finally {
+      handleCloseModal();
+    }
   };
 
-  const cancelarPedido = (id) => {
-    setPedidoList((prevPedidos) => prevPedidos.filter((pedido) => pedido.id !== id));
+  const finalizeOrder = (id) =>
+    updateOrderStatus(id, STATUS.COMPLETED, (orders, id) =>
+      orders.map((order) =>
+        order.id === id ? { ...order, status: STATUS.COMPLETED } : order
+      )
+    );
+
+  const cancelOrder = (id) =>
+    updateOrderStatus(id, STATUS.CANCELED, (orders, id) =>
+      orders.filter((order) => order.id !== id)
+    );
+
+  const handleOpenModal = (modalName, orderId) => {
+    setOpenModal(modalName);
+    setSelectedOrderId(orderId);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(null);
+    setSelectedOrderId(null);
+  };
+
+  const handleSnackbarClose = () => {
+    setError(null); 
   };
 
   return (
     <Container sx={classe.itemListContainer}>
-      {/* Toggle Button Group */}
-      <ToggleButtonGroup
-        value={statusFiltro}
-        exclusive
-        onChange={handleFiltroChange}
-        sx={classe.toggleButtonGroup}
-      >
-        <ToggleButton value="a preparar" sx={classe.toggleButton}>
-          A preparar
-        </ToggleButton>
-        <ToggleButton value="finalizado" sx={classe.toggleButton}>
-          Finalizados
-        </ToggleButton>
-      </ToggleButtonGroup>
+      <StatusToggle filter={filter} setFilter={setFilter} />
 
-      {/* List of Orders */}
-      {pedidoList
-        .filter((pedido) => pedido.status === statusFiltro)
-        .map((pedido, index, array) => (
-          <Box key={pedido.id}>
-            <Box sx={classe.orderItem}>
-              {/* Order Details Section */}
-              <Box sx={classe.orderDetails}>
-                <img
-                  src={pedido.imagem}
-                  alt={`Pedido ${pedido.id}`}
-                  style={classe.orderImage}
-                />
-                <Typography sx={classe.orderId}>ID {pedido.id}</Typography>
-              </Box>
+      {loading && (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+          <CircularProgress />
+        </Box>
+      )}
 
-              {/* Action Buttons */}
-              <Box sx={classe.actionButtons}>
-                <Button variant="contained" color="secondary" sx={classe.actionButton}>
-                  Ver Pedido
-                </Button>
-                {statusFiltro === "a preparar" && (
-                  <>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => finalizarPedido(pedido.id)}
-                      sx={classe.actionButton}
-                    >
-                      Finalizar
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      onClick={() => cancelarPedido(pedido.id)}
-                      sx={classe.actionButton}
-                    >
-                      Cancelar
-                    </Button>
-                  </>
-                )}
-              </Box>
-            </Box>
+      {!loading && filteredOrders.length === 0 && (
+        <Box sx={{ mt: 2, textAlign: "center" }}>Nenhum pedido encontrado.</Box>
+      )}
 
+      {!loading && highlightedOrder && (
+        <Box sx={{ ...classe.highlightOrder }}>
+          <OrderItem
+            order={highlightedOrder}
+            onOpen={handleOpenModal}
+            isInProgress={filter === STATUS.IN_PROGRESS}
+            isHighlighted={true}
+          />
+        </Box>
+      )}
+
+      {!loading &&
+        remainingOrders.map((order, index, array) => (
+          <Fragment key={order.id}>
+            <OrderItem
+              order={order}
+              onOpen={handleOpenModal}
+              isInProgress={filter === STATUS.IN_PROGRESS}
+            />
             {index < array.length - 1 && <Divider sx={{ my: 2 }} />}
-          </Box>
+          </Fragment>
         ))}
+
+      <OrderModal
+        openModal={openModal}
+        handleCloseModal={handleCloseModal}
+        handleConfirm={openModal === "confirm" ? finalizeOrder : cancelOrder}
+        selectedOrderId={selectedOrderId}
+      />
+      <OrderCart
+        title={"Pedido"}
+        open={openModal === "order"}
+        handleClose={handleCloseModal}
+        items={selectedOrder}
+      />
+
+      <Snackbar
+        open={!!error}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: "100%",  backgroundColor: "#FECDCD",   // Cor de fundo vermelha
+      color: "black",    }}>
+          {error}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
