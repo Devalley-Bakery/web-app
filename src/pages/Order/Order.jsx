@@ -19,7 +19,7 @@ export default function Order() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState(STATUS.IN_PROGRESS);
-  const [openModal, setOpenModal] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState();
 
@@ -47,9 +47,9 @@ export default function Order() {
     fetchOrders(filter);
   }, [filter]);
 
-  const filteredOrders = orders
+  const filteredOrders = orders ? orders
     .filter((order) => order.status === filter)
-    .sort((a, b) => (filter === STATUS.COMPLETED ? b.id - a.id : a.id - b.id));
+    .sort((a, b) => (filter === STATUS.COMPLETED ? b.id - a.id : a.id - b.id)): []
 
   const highlightedOrder =
     filter === STATUS.IN_PROGRESS
@@ -94,7 +94,7 @@ export default function Order() {
   };
 
   const handleCloseModal = () => {
-    setOpenModal(null);
+    setOpenModal(false);
     setSelectedOrderId(null);
   };
 
