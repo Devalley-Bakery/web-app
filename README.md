@@ -8,7 +8,13 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
 ## Getting Started 
+To configure this project, first you need to install all dependencies:
+```bash
+npm install
+```
+It is also important to set your local environment variables in a ".env" file. You can use the .env.example file to get the required variables.
 
-In this project directory, you can run:
-
-### npm run dev
+To run the project:
+```bash
+npm run dev
+```
