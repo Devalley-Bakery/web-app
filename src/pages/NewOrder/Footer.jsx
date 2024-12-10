@@ -25,7 +25,7 @@ export default function Footer({ items = [], onOpenModal, onConfirm}) {
           backgroundColor: '#FFA1AF',
         },
       }} >
-        {`${isMobile ? 'FINALIZAR' : 'REALIZAR PEDIDO'}`}
+        {`${isMobile ? 'FINALIZAR' : 'REGISTRAR PEDIDO'}`}
       </Button>
     </Box>
   );

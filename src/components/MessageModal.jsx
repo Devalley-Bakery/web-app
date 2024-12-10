@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Box, Backdrop, Fade, Button } from "@mui/material";
+import { Box, Backdrop, Fade, Button, CircularProgress } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { classe } from "./style";
@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 
 export default function MessageModal({
     open,
-    description
+    description,
+    type
 }) {
     return (
         <div>
@@ -26,7 +27,8 @@ export default function MessageModal({
                     <Box sx={classe.messageModal}>
                         <Typography sx={{pb:2}}variant='body1'>{description}</Typography>
                         
-                            <Button variant='contained' sx={{ width: '48%' }}  component={Link} to="/" >FECHAR</Button>
+                            {type !== 'cancel-confirmation' ? <Button variant='contained' sx={{ width: '48%' }}  component={Link} to="/" >FECHAR</Button> :
+                            <CircularProgress />}
                         
                     </Box>
                 </Fade>

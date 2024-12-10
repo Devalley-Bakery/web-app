@@ -15,6 +15,7 @@ import ModalCart from "./ModalCart";
 import DefaultModal from "../../components/DefaultModal";
 import MessageModal from "../../components/MessageModal";
 import ReviewOrderDialog from "./ReviewOrder";
+import { useNavigate } from "react-router-dom";
 
 export default function NewOrder() {
   const [products, setProducts] = useState([]);
@@ -24,6 +25,7 @@ export default function NewOrder() {
   const [status, setStatus] = useState({ message: "", open: false });
   const [errorMessages, setErrorMessages] = useState({});
   const isMobile = useMediaQuery("(max-width:600px)");
+  const navigate = useNavigate()
 
   const filteredItems = useMemo(
     () => products.filter((product) => product.type === selectedCategory),
@@ -108,6 +110,19 @@ export default function NewOrder() {
 
   const handleCloseModal = () => {
     setOpenModal(null);
+  };
+
+  const handleCancel = () => {
+    setOpenModal('cancel-confirmation');
+    setStatus({
+      message: "Cancelando pedido! Aguarde um instante...",
+      open: true,
+    });
+    const timer = setTimeout(() => {
+      navigate('/')
+    }, 3000);
+    return () => clearTimeout(timer);
+
   };
 
   const handleSubmit = () => {
@@ -197,6 +212,7 @@ export default function NewOrder() {
         handleClose={handleCloseModal}
         handleConfirm={handleConfirm}
         items={selectedItems}
+        handleCancel={() => setOpenModal("cancel")}
       />
 
       <ReviewOrderDialog
@@ -208,13 +224,25 @@ export default function NewOrder() {
       <DefaultModal
         title={"Confirmar pedido?"}
         open={openModal === "confirm"}
-        handleClose={handleCloseModal}
+        handleClose={() => setOpenModal('cancel')}
+        type={'confirm'}
         handleConfirm={handleSubmit}
         description={
           "Confirme para enviar o pedido à produção. Após confirmar, não será possível alterar."
         }
       />
-      <MessageModal description={status.message} open={status.open} />
+
+      <DefaultModal
+        title={"Cancelar pedido?"}
+        open={openModal === "cancel"}
+        handleClose={handleCloseModal}
+        handleConfirm={handleCancel}
+        type={'cancel'}
+        description={
+          "Tem certeza de que deseja cancelar este pedido? Todos os dados inseridos serão descartados e não poderão ser recuperados."
+        }
+      />
+      <MessageModal description={status.message} open={status.open} type={openModal}/>
     </Container>
   );
 }

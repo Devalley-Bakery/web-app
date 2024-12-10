@@ -130,7 +130,7 @@ export default function ReviewOrderDialog({ onClose, open, setConfirmDialog }) {
 
         <Container sx={classe.actions}>
           <Button variant="outlined" sx={classe.cancelButton} onClick={onClose}>
-            CANCELAR
+            VOLTAR
           </Button>
           <Typography sx={{mt:1}}>
             Total: R$ {totalPrice.toFixed(2)}

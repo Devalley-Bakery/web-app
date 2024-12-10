@@ -96,7 +96,7 @@ export const classe = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "380px",
+    width: "400px",
     height: "60%",
     boxShadow: 24,
     bgcolor: (theme) => theme.palette.background.paper,
@@ -141,7 +141,7 @@ export const classe = {
   modalButton: {
     marginTop: "16px",
     alignSelf: "center",
-    width: "60%",
+    width: "48%",
     backgroundColor: (theme) => theme.palette.background.secondary,
     color: "black",
     textTransform: "none",

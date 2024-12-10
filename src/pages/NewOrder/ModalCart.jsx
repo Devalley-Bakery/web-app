@@ -1,12 +1,31 @@
 /* eslint-disable react/prop-types */
-import { Container, List, ListItem, ListItemText, Box, IconButton, Backdrop, Fade, Button } from '@mui/material';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import CloseIcon from '@mui/icons-material/Close';
-import { classe } from './styles';
+import {
+  Container,
+  List,
+  ListItem,
+  ListItemText,
+  Box,
+  IconButton,
+  Backdrop,
+  Fade,
+  Button,
+} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import CloseIcon from "@mui/icons-material/Close";
+import { classe } from "./styles";
 
-export default function ModalCart({ open, handleClose, items, title, handleConfirm }) {
-  const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+export default function ModalCart({
+  open,
+  handleClose,
+  items,
+  title,
+  handleConfirm,
+  handleCancel
+}) {
+  const totalPrice = items
+    .reduce((total, item) => total + item.price * item.quantity, 0)
+    .toFixed(2);
 
   return (
     <div>
@@ -20,7 +39,6 @@ export default function ModalCart({ open, handleClose, items, title, handleConfi
             timeout: 500,
           },
         }}
-
       >
         <Fade in={open}>
           <Box sx={classe.mainBoxModal}>
@@ -34,27 +52,47 @@ export default function ModalCart({ open, handleClose, items, title, handleConfi
             </Box>
             <Container sx={classe.modalItensContainer}>
               <Container sx={classe.modalItens}>
-                <List >
+                <List>
                   {items.map((item) => (
                     <ListItem key={item.id}>
-                      <ListItemText sx={classe.modelDetails} primary={`${item.quantity} ${item.name}`} />
+                      <ListItemText
+                        sx={classe.modelDetails}
+                        primary={`${item.quantity} ${item.name}`}
+                      />
                     </ListItem>
                   ))}
                 </List>
-              </Container >
+              </Container>
               <Typography variant="body1" sx={classe.totalText}>
                 Total: R$ {totalPrice}
               </Typography>
             </Container>
-            <Button
-              variant='contained'
-              color="secondary"
-              sx={classe.modalButton}
-              disabled={totalPrice <= 0}
-              onClick={handleConfirm}
+
+            <Container
+              sx={{ display: "flex", justifyContent: "space-between" }}
             >
-              Registrar Pedido
-            </Button>
+              <Button
+                sx={{
+                  ...classe.modalButton,
+                  backgroundColor: "white",
+                  "&:hover": {
+                    backgroundColor: "#F9ECEB",
+                  },
+                }}
+                onClick={handleCancel}
+              >
+                Cancelar Pedido
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={classe.modalButton}
+                disabled={totalPrice <= 0}
+                onClick={handleConfirm}
+              >
+                Registrar Pedido
+              </Button>
+            </Container>
           </Box>
         </Fade>
       </Modal>
