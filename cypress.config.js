@@ -4,10 +4,9 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:5173', 
     setupNodeEvents(on, config) {
-      // Configurações para eventos, se necessário
     },
-    supportFile: 'cypress/support/e2e.js', // Caminho para o arquivo de suporte
-    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}', // Padrão dos arquivos de teste
+    supportFile: false,
+   specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}', // Padrão dos arquivos de teste
   },
   video: false, // Desativa gravação de vídeo (opcional)
   screenshotsFolder: 'cypress/screenshots', // Pasta de capturas de tela
