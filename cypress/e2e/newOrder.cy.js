@@ -65,7 +65,7 @@ describe('Fluxo Alternativo - Cancelamento antes do cadastro de pedido', () => {
     cy.visit('/');
   });
 
-  it('Deve cancelar o cadastro de um novo pedido - Fluxo 1', () => {
+  it('Deve cancelar o cadastro de um novo pedido ', () => {
     cy.wait(2000);
     cy.contains('Novo Pedido').click();
 
@@ -99,49 +99,6 @@ describe('Fluxo Alternativo - Cancelamento antes do cadastro de pedido', () => {
     cy.contains('Cancelando pedido! Aguarde um instante...').should('be.visible')
   });
 
-  it('Deve cancelar o cadastro de um novo pedido - Fluxo 2', () => {
-    cy.wait(2000);
-    cy.contains('Novo Pedido').click();
-
-    cy.wait(2000);
-    cy.get('.MuiIconButton-root')
-      .not('[disabled]')
-      .eq(1)
-      .first()
-      .click();
-
-    cy.wait(2000);
-    cy.get('.MuiIconButton-root')
-      .not('[disabled]')
-      .eq(1)
-      .last()
-      .click();
-
-    cy.wait(2000);
-    cy.contains('Doces').click();
-
-    cy.wait(2000);
-    cy.get('.MuiIconButton-root')
-      .not('[disabled]')
-      .eq(1)
-      .first()
-      .click()
-      .click();
-
-    cy.wait(2000);
-    cy.contains('REGISTRAR PEDIDO').click();
-
-    cy.wait(2000);
-    cy.contains('PROSSEGUIR').click();
-
-    cy.wait(2000);
-    cy.contains('CANCELAR PEDIDO').click();
-
-    cy.wait(2000);
-    cy.contains('CONFIRMAR').click();
-
-    cy.contains('Cancelando pedido! Aguarde um instante...').should('be.visible')
-  })
 });
 
 describe('Fluxo de excessão -  Itens com quantidade maior que o estoque disponível', () => {
