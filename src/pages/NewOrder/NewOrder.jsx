@@ -224,7 +224,7 @@ export default function NewOrder() {
       <DefaultModal
         title={"Confirmar pedido?"}
         open={openModal === "confirm"}
-        handleClose={() => setOpenModal('cancel')}
+        handleClose={handleCloseModal}
         type={'confirm'}
         handleConfirm={handleSubmit}
         description={
